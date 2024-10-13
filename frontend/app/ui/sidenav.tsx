@@ -4,9 +4,11 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ChevronLeft, ChevronRight, Home, Settings, Users } from "lucide-react"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { usePlayerContext } from "@/context/PlayerContext";
 
 // Define the structure for our route objects
 interface Route {
@@ -24,6 +26,7 @@ const routes: Route[] = [
 ]
 
 export default function Sidenav() {
+  const { profilePicture, username } = usePlayerContext();
   const [isCollapsed, setIsCollapsed] = useState(false)
   const pathname = usePathname()
 
@@ -64,6 +67,19 @@ export default function Sidenav() {
           })}
         </ul>
       </nav>
+      <div className={`p-4 border-t ${isCollapsed ? "items-center" : "items-start"}`}>
+        <div className={`flex items-center space-x-3 ${isCollapsed ? "justify-center" : ""}`}>
+          <Avatar>
+            <AvatarImage src={profilePicture} alt="User avatar" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          {!isCollapsed && (
+            <div>
+              <p className="text-sm font-medium">{username}</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
