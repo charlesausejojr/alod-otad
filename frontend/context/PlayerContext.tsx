@@ -16,7 +16,7 @@ interface PlayerContextType {
 const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
 
 export const PlayerProvider = ({ children }: { children: ReactNode }) => {
-  const steam64ID = "76561198439726456";
+  const steam64ID = "76561198125669261";
   const steam32ID = convertSteam64ToSteam32(steam64ID);
   const [playerId, setPlayerId] = useState<string>(String(steam32ID)); // Default ID for now
   const [username, setUsername] = useState<string>('');

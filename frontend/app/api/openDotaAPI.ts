@@ -20,4 +20,14 @@ export const fetchTopHeroes = async (playerId: string) => {
     return response;
 };
 
+export const fetchHeroStats = async () => {
+    const response = await openDotaFetcher(`heroStats`, '');
+    return response;
+};
+
+export const fetchTopPeers = async (playerId: string) => {
+    const response = await openDotaFetcher(`players/${playerId}/peers`, '');
+    return response;
+};
+
 // Add more functions as needed

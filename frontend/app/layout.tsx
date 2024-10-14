@@ -1,18 +1,8 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { montserrat } from "./ui/fonts";
 import { PlayerProvider } from '@/context/PlayerContext';
 import "./globals.css";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import Sidenav from "./ui/sidenav";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,10 +17,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${montserrat.className} antialiased`}
       >
         <PlayerProvider>
-          {children}
+          <div className="flex h-screen">
+            <Sidenav/>
+            <div className="w-full">
+              {children}
+            </div>
+          </div>
         </PlayerProvider>
       </body>
     </html>

@@ -20,7 +20,7 @@ interface Route {
 // Define our routes
 const routes: Route[] = [
   { name: "Home", path: "/", icon: Home },
-  { name: "Users", path: "/users", icon: Users },
+  { name: "Bubble", path: "/bubble", icon: Users },
   { name: "Settings", path: "/settings", icon: Settings },
   // Add more routes here as needed
 ]

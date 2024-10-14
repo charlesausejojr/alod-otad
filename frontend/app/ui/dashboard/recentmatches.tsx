@@ -1,11 +1,12 @@
 import React from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { Match } from "@/lib/types";
+import { FilteredMatch } from "@/lib/types";
 
-function RecentMatches({ matches }: { matches: Match[] }) {
+function RecentMatches({ matches }: { matches: FilteredMatch[] }) {
   return (
     <Card>
       <CardHeader>
@@ -26,11 +27,13 @@ function RecentMatches({ matches }: { matches: Match[] }) {
             {matches.map((match, index) => (
               <TableRow key={index}>
                 <TableCell>
-                  {/*<img
-                    src={`https://api.opendota.com${match.hero_img}`}
-                    alt={match.hero_name}
-                    className="w-8 h-8 rounded-full"
-                  />*/}
+                  <div className='flex items-center space-x-5'>
+                    <Avatar>
+                      <AvatarImage className="object-cover" src={match.src} alt="User avatar" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <span>{match.hero_name}</span>
+                  </div>
                 </TableCell>
                 <TableCell className={match.player_slot < 128 === match.radiant_win ? "text-green-500" : "text-red-500"}>
                   {match.player_slot < 128 === match.radiant_win ? "Win" : "Loss"}

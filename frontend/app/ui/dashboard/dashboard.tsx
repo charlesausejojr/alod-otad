@@ -1,13 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { PlayerData, Match, WinLose } from "@/lib/types"
+import { PlayerData, Match, WinLose, PeerStats, HeroStats, Hero } from "@/lib/types"
 import { usePlayerContext } from '@/context/PlayerContext';
 import DashboardLoader from "./dashboard-loader"
 import RecentMatches from "./recentmatches"
 import WinLoseChart from "./winlose-chart"
 import TopList from "./toplist"
-import { fetchPlayerData, fetchRecentMatches, fetchWinLose } from "@/app/api/openDotaAPI";
+import { fetchPlayerData, fetchRecentMatches, fetchTopPeers, fetchWinLose, fetchTopHeroes, fetchHeroStats } from "@/app/api/openDotaAPI";
+import { getTopPeers, getTopHeroes, getModifiedRecentMatches } from "@/lib/utils";
 
 // Main Dashboard component
 export default function Dashboard() {
@@ -15,23 +16,29 @@ export default function Dashboard() {
   const [playerData, setPlayerData] = useState<PlayerData>();
   const [winLose, setWinLose] = useState<WinLose>({win: 0, lose: 0});
   const [recentMatches, setRecentMatches] = useState<Match[]>([]);
+  const [peers, setPeers] = useState<PeerStats[]>([]);
+  const [heroes, setHeroes] = useState<Hero[]>([]);
+  const [heroStats, setHeroStats] = useState<HeroStats[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [playerData, recentMatches, winLose] = await Promise.all([
+        const [playerData, recentMatches, winLose, peers, heroes, heroStats] = await Promise.all([
           fetchPlayerData(playerId),
           fetchRecentMatches(playerId),
-          fetchWinLose(playerId)
-          // fetchTopHeroes(playerId),
+          fetchWinLose(playerId),
+          fetchTopPeers(playerId),
+          fetchTopHeroes(playerId),
+          fetchHeroStats()
         ]);
 
         setPlayerData(playerData);
         setRecentMatches(recentMatches);
         setWinLose(winLose);
-        console.log(winLose);
-        // setTopHeroes(topHeroes);
+        setPeers(peers);
+        setHeroes(heroes);
+        setHeroStats(heroStats);
         
         setUsername(playerData.profile.personaname);
         setProfilePicture(playerData.profile.avatar);
@@ -51,30 +58,17 @@ export default function Dashboard() {
     return  <DashboardLoader/>
   }
 
-  /*
   if (!playerData) {
     return <div>Error loading player data</div>
   }
-    */
 
-  // Mock data for demonstration purposes
-  const topHeroes = [
-    { name: "Anti-Mage", percentage: 65.5 },
-    { name: "Invoker", percentage: 60.2 },
-    { name: "Shadow Fiend", percentage: 58.7 },
-    { name: "Pudge", percentage: 55.3 },
-    { name: "Mirana", percentage: 53.1 },
-  ]
+  const modifiedRecentMatches = getModifiedRecentMatches(recentMatches, heroStats);
 
-  const topPeers = [
-    { name: "Player1", percentage: 70.2 },
-    { name: "Player2", percentage: 65.8 },
-    { name: "Player3", percentage: 62.4 },
-    { name: "Player4", percentage: 59.1 },
-    { name: "Player5", percentage: 57.6 },
-  ]
+  const topHeroes = getTopHeroes(heroes, heroStats);
 
-  console.log(playerData);
+  const topPeers = getTopPeers(peers); 
+
+  console.log(topHeroes);
 
   return (
     <div className="flex h-screen w-full bg-background">
@@ -87,7 +81,7 @@ export default function Dashboard() {
           <TopList title="Top 5 Peers" items={topPeers} />
         </div>
         <div className="mt-6">
-          <RecentMatches matches={recentMatches} />
+          <RecentMatches matches={modifiedRecentMatches} />
         </div>
       </main>
     </div>
