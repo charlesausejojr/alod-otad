@@ -161,3 +161,12 @@ export type PeerStats = {
     avatar: string;
     avatarfull: string;
 };
+
+export type Peer = {
+    steamId: number;
+    name: string;
+    wins: number;
+    losses: number;
+    winRate? : number;
+    img? : string;
+}

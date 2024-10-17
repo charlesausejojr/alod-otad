@@ -1,4 +1,4 @@
-import { openDotaFetcher } from '@/lib/openDotaFetcher';
+import { openDotaFetcher } from '@/app/api/open-dota/openDotaFetcher';
 
 export const fetchPlayerData = async (playerId: string) => {
     const response = await openDotaFetcher(`players/${playerId}`, '');
